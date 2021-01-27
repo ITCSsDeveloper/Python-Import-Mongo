@@ -3,6 +3,7 @@ import datetime
 import model as la_model
 import logging
 import os
+import time
 
 
 # Setup Logging
@@ -18,16 +19,22 @@ console.setLevel(logging.DEBUG)
 formatter = logging.Formatter(logFormatter)
 console.setFormatter(formatter)
 logging.getLogger('').addHandler(console)
-                            
+
+conn_str = 'mongodb://root:example@localhost:27017'
+
 class ImportToMongo :
     __pid = None
     __myclient = None
     __mydb = None
     __mycol = None
+
+    __start_time = None
+    __stop_time = None
     
     def __init__(self):
         logging.debug(F'Init Import To Mongo.')
-        conn_str = 'mongodb://root:example@localhost:27017'
+        self.__start_time = time.time()
+        
         
         # Set PID
         self.__pid = os.getpid()
@@ -42,6 +49,14 @@ class ImportToMongo :
         logging.debug(F'DB Connected host={self.__myclient.HOST}:{self.__myclient.PORT}')
         pass
     
+    def time_convert(self, sec):
+        mins = sec // 60
+        sec = sec % 60
+        hours = mins // 60
+        mins = mins % 60
+        return ("Time Lapsed = {0}:{1}:{2}".format(int(hours),int(mins),sec))
+
+
     def start(self, file_name): 
         row = 0             # Current Row Insert Per Cycle
         limit = 10          # Limit Row Insert Per Cycle (Recommend 10000 rows per cpu core)
@@ -148,11 +163,14 @@ class ImportToMongo :
                     row = 0
                     la_list_temp = []
                 row += 1
-                    
-                    
-        
+
+        self.__stop_time = time.time()
+        time_lapsed = self.time_convert((self.__stop_time - self.__start_time) )
+
         logging.debug(F'-------------------------------------------')
         logging.debug(F'Complete')
+        logging.debug(F'Time lapsed : {time_lapsed}')
+
         logging.debug(F'Insert Limit : {limit}')
         logging.debug(F'Total Lines : {num_lines}')
         logging.debug(F'Total Inserted : {row_inserted}')
