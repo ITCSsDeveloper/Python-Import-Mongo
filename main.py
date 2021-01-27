@@ -1,9 +1,9 @@
 import pymongo
-import datetime
 import model as la_model
 import logging
 import os
 import time
+import sys
 
 
 # Setup Logging
@@ -20,6 +20,7 @@ formatter = logging.Formatter(logFormatter)
 console.setFormatter(formatter)
 logging.getLogger('').addHandler(console)
 
+# Connection
 conn_str = 'mongodb://root:example@localhost:27017'
 
 class ImportToMongo :
@@ -30,11 +31,12 @@ class ImportToMongo :
 
     __start_time = None
     __stop_time = None
+
+    __limit = 1
     
     def __init__(self):
         logging.debug(F'Init Import To Mongo.')
         self.__start_time = time.time()
-        
         
         # Set PID
         self.__pid = os.getpid()
@@ -45,8 +47,11 @@ class ImportToMongo :
         self.__mydb = self.__myclient['gcc'] # Create Database
         self.__mycol = self.__mydb['gcc']    # Create Collection
         self.__mycol.delete_many({})         # Clear Collection
-        
         logging.debug(F'DB Connected host={self.__myclient.HOST}:{self.__myclient.PORT}')
+
+        # Get args
+        self.get_args()
+        logging.debug(F'args limit={self.__limit}')
         pass
     
     def time_convert(self, sec):
@@ -56,14 +61,19 @@ class ImportToMongo :
         mins = mins % 60
         return ("Time Lapsed = {0}:{1}:{2}".format(int(hours),int(mins),sec))
 
+    def get_args(self):
+        for a in sys.argv:
+            print(a)
+            if "-limit=" in a: 
+                self.__limit = int(a.split('=')[1])
 
     def start(self, file_name): 
-        row = 0             # Current Row Insert Per Cycle
-        limit = 10          # Limit Row Insert Per Cycle (Recommend 10000 rows per cpu core)
-        la_list_temp = []   # Temporary files
-        row_inserted = 0    # Total Row Inserted 
-        header = None       # var for keep header file
-        footer = None       # var for keep footer file
+        row = 0                 # Current Row Insert Per Cycle
+        limit = self.__limit    # Limit Row Insert Per Cycle (Recommend 10000 rows per cpu core)
+        la_list_temp = []       # Temporary files
+        row_inserted = 0        # Total Row Inserted 
+        header = None           # var for keep header file
+        footer = None           # var for keep footer file
 
         num_lines = sum(1 for line in open(file_name))  # Check Total Lines
         
@@ -153,16 +163,19 @@ class ImportToMongo :
                     la_model_temp.XXackStaXXX = data[66].replace('\n','')
                     la_list_temp.append(la_model_temp.__dict__)
                 
-               
+                row += 1
+
                 # Insert To MongoDB
                 if (row >= limit) or (data[0] == 'FT' and row != 0) :
-                    self.__mycol.insert_many(la_list_temp)     
-                    row_inserted += row
-                    
-                    logging.debug(F'Inserted = {str(row)} {str(row_inserted)}/{str(num_lines)}')
-                    row = 0
-                    la_list_temp = []
-                row += 1
+                    if  len(la_list_temp) > 0:
+                        self.__mycol.insert_many(la_list_temp)     
+                        row_inserted += len(la_list_temp)
+                        
+                        logging.debug(F'Inserted = {str(row)} {str(row_inserted)}/{str(num_lines)}')
+                        la_list_temp = []
+                        row = 0
+
+                
 
         self.__stop_time = time.time()
         time_lapsed = self.time_convert((self.__stop_time - self.__start_time) )
