@@ -76,7 +76,38 @@ class ImportToMongo :
             if "-footer=" in a: 
                 self.__footer = int(a.split('=')[1])
 
-    def start(self, file_name): 
+    def get_mapping_template(self, map_file_name) :
+       isHeader= False,
+       isBody = False,
+       isFooter = False
+       template = {
+           "header" : [],
+           "body" : [],
+           "footer" : []
+       }
+       with open(map_file_name, mode="r") as f:
+           for line in f:
+               line = line.strip()
+
+               if(line == "#HEADER") : isHeader = True; continue
+               elif(line=="#ENDHEADER"): isHeader = False; continue
+               elif(line == "#BODY") : isBody = True; continue
+               elif(line=="#ENDBODY"): isBody = False; continue
+               elif(line == "#FOOTER") : isFooter = True; continue
+               elif(line=="#ENDFOOTER"):isFooter = False; continue
+
+               if isHeader == True :
+                   template["header"].append(line)
+                   continue
+               elif isBody == True :
+                   template["body"].append(line)
+                   continue
+               elif isFooter == True :
+                   template["footer"].append(line)
+                   continue
+       return template
+
+    def start(self, file_name, map_file_name): 
         row = 0                 # Current Row Insert Per Cycle
         limit = self.__limit    # Limit Row Insert Per Cycle (Recommend 10000 rows per cpu core)
         la_list_temp = []       # Temporary files
@@ -85,10 +116,15 @@ class ImportToMongo :
         footer = None           # var for keep footer file
 
         num_lines = sum(1 for line in open(file_name))  # Check Total Lines
-        
+        map_template = self.get_mapping_template(map_file_name)    
+
+        logging.debug(F'-------------------------------------------')
         logging.debug(F'Total Lines {str(num_lines)}')
+        logging.debug(F'File Name : {file_name}')
+        logging.debug(F'Map File Name : {map_file_name}')
         logging.debug(F'Start Import')
 
+        # Start Process
         with open(file_name , mode="r") as f:
             for line in f:
                 data = line.split('|')          # Split With
@@ -105,76 +141,12 @@ class ImportToMongo :
                     footer = data
                     pass
                 # Check Data and Keep
-                elif data[0] == self.__body: 
-                    la_model_temp.XXCORDTXXX = data[0]
-                    la_model_temp.XXC = data[1]
-                    la_model_temp.XXENTIFICATION_TXXX = data[2]
-                    la_model_temp.XXD = data[3]
-                    la_model_temp.XXRTHOFDXXX = data[4]
-                    la_model_temp.XXTYPECXXX = data[5]
-                    la_model_temp.XXSUBTYPECXXX = data[6]
-                    la_model_temp.XXNXXX = data[7]
-                    la_model_temp.XXANTEDXXX = data[8]
-                    la_model_temp.XXINCIXXX = data[9]
-                    la_model_temp.XXTSTBALAXXX = data[10]
-                    la_model_temp.XXTTXXX = data[11]
-                    la_model_temp.XXXINSTXXX = data[12]
-                    la_model_temp.XXNINSTXXX = data[13]
-                    la_model_temp.XXEQINSTXXX = data[14]
-                    la_model_temp.XXSXXX = data[15]
-                    la_model_temp.XXUEIXXX = data[16]
-                    la_model_temp.XXEDXXX = data[17]
-                    la_model_temp.XXXTDUEDXXX = data[18]
-                    la_model_temp.XXGNDXXX = data[19]
-                    la_model_temp.XXENDXXX = data[20]
-                    la_model_temp.XXARTDXXX = data[21]
-                    la_model_temp.XXTUREDXXX = data[22]
-                    la_model_temp.XXAWDOWXXX = data[23]
-                    la_model_temp.XXAWDOWNDXXX = data[24]
-                    la_model_temp.XXSBDXXX = data[25]
-                    la_model_temp.XXSBXXX = data[26]
-                    la_model_temp.XXIDXXX = data[27]
-                    la_model_temp.XXTEFFDXXX = data[28]
-                    la_model_temp.XXNTEFFDXXX = data[29]
-                    la_model_temp.XXTRATECXXX = data[30]
-                    la_model_temp.XXTMXXX = data[31]
-                    la_model_temp.XXRMALRXXX = data[32]
-                    la_model_temp.XXNALTYRXXX = data[33]
-                    la_model_temp.XXRXXX = data[34]
-                    la_model_temp.XXACEPERXXX = data[35]
-                    la_model_temp.XXACEPERIODXXX = data[36]
-                    la_model_temp.XXRXXX = data[37]
-                    la_model_temp.XXRXXX = data[38]
-                    la_model_temp.XXRINTHXXX = data[39]
-                    la_model_temp.XXVANCEINTERXXX = data[40]
-                    la_model_temp.XXINFXXX = data[41]
-                    la_model_temp.XXINTXXX = data[42]
-                    la_model_temp.XXFXXX = data[43]
-                    la_model_temp.XXLARYFXXX = data[44]
-                    la_model_temp.XXPAYMETHODCODXXX = data[45]
-                    la_model_temp.XXLLADDRCXXX = data[46]
-                    la_model_temp.XXCXXX = data[47]
-                    la_model_temp.XXSTTRNDXXX = data[48]
-                    la_model_temp.XXDXXX = data[49]
-                    la_model_temp.XXMINXXX = data[50]
-                    la_model_temp.XXDXXX = data[51]
-                    la_model_temp.XXMPRXXX = data[52]
-                    la_model_temp.XXJECTCODXXX = data[53]
-                    la_model_temp.XXTOBJCXXX = data[54]
-                    la_model_temp.XXNSCXXX = data[55]
-                    la_model_temp.XXDIXXX = data[56]
-                    la_model_temp.XXDDUEDXXX = data[57]
-                    la_model_temp.XXSTDEBTRESXXX = data[58]
-                    la_model_temp.XXMRESTRUCTXXX = data[59]
-                    la_model_temp.XXLLOVERDXXX = data[60]
-                    la_model_temp.XXLLOVERINTRXXX = data[61]
-                    la_model_temp.XXLLOVERPENRXXX = data[62]
-                    la_model_temp.XXLLOVERSPREADRXXX = data[63]
-                    la_model_temp.XXURCEXXX = data[64]
-                    la_model_temp.XXAXXX = data[65]
-                    la_model_temp.XXackStaXXX = data[66].replace('\n','')
-                    la_list_temp.append(la_model_temp.__dict__)
-                
+                elif data[0] == self.__body:
+                    model_temp = {}
+                    for i in range(len(data)):
+                        model_temp[map_template['body'][i]] = data[i].strip().replace('\n','')
+                    la_list_temp.append(model_temp)
+
                 row += 1
 
                 # Insert To MongoDB
@@ -187,14 +159,14 @@ class ImportToMongo :
                         la_list_temp = []
                         row = 0
 
-                
-
         self.__stop_time = time.time()
         time_lapsed = self.time_convert((self.__stop_time - self.__start_time) )
 
         logging.debug(F'-------------------------------------------')
         logging.debug(F'Complete')
         logging.debug(F'Time lapsed : {time_lapsed}')
+        logging.debug(F'File Name : {file_name}')
+        logging.debug(F'Map File Name : {map_file_name}')
 
         logging.debug(F'Insert Limit : {limit}')
         logging.debug(F'Total Lines : {num_lines}')
@@ -206,5 +178,5 @@ class ImportToMongo :
 
 # Init App And Start Process
 app = ImportToMongo()
-app.start("./data/LA00000.GCC")
+app.start("./data/LA00000.GCC", "./data/LA00000.MAP")
 del(app)
