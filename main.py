@@ -33,7 +33,10 @@ class ImportToMongo :
     __stop_time = None
 
     __limit = 1
-    
+    __header = "HT"
+    __body = "DT"
+    __footer = "FT"
+
     def __init__(self):
         logging.debug(F'Init Import To Mongo.')
         self.__start_time = time.time()
@@ -66,6 +69,12 @@ class ImportToMongo :
             print(a)
             if "-limit=" in a: 
                 self.__limit = int(a.split('=')[1])
+            if "-header=" in a: 
+                self.__header = int(a.split('=')[1])
+            if "-body=" in a: 
+                self.__body = int(a.split('=')[1])
+            if "-footer=" in a: 
+                self.__footer = int(a.split('=')[1])
 
     def start(self, file_name): 
         row = 0                 # Current Row Insert Per Cycle
@@ -85,15 +94,18 @@ class ImportToMongo :
                 data = line.split('|')          # Split With
                 la_model_temp = la_model.body() # New Object Model
 
-                if data[0] == 'HT':             # Check Header and Keep
+                # Check Header and Keep
+                if data[0] == self.__header:             
                     data[2] = data[2].replace('\n','')
                     header = data
                     continue
-                elif data[0] == 'FT' :          # Check Footer and Keep
+                # Check Footer and Keep
+                elif data[0] == self.__footer:          
                     data[1] = data[1].replace('\n','')
                     footer = data
                     pass
-                elif data[0] == 'DT': # Check Data and Keep
+                # Check Data and Keep
+                elif data[0] == self.__body: 
                     la_model_temp.XXCORDTXXX = data[0]
                     la_model_temp.XXC = data[1]
                     la_model_temp.XXENTIFICATION_TXXX = data[2]
@@ -166,7 +178,7 @@ class ImportToMongo :
                 row += 1
 
                 # Insert To MongoDB
-                if (row >= limit) or (data[0] == 'FT' and row != 0) :
+                if (row >= limit) or (data[0] == self.__footer and row != 0) :
                     if  len(la_list_temp) > 0:
                         self.__mycol.insert_many(la_list_temp)     
                         row_inserted += len(la_list_temp)
