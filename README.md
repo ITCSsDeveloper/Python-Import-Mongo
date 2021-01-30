@@ -24,7 +24,9 @@
 - พิมพ์ ' python main.py ' Enter
 
 
-
+command : 
+- python3 main.py -file_name=./data/LA00000.GCC -map_file_name=./data/LA00000.MAP -limit=100
+- python3 main.py -file_name=./data/LA00000.GCC -map_file_name=./data/LA00000.MAP -limit=100 -header=HT -body=DT -footer=FT
 
 ขอบคุณครับ
 :D

@@ -32,10 +32,13 @@ class ImportToMongo :
     __start_time = None
     __stop_time = None
 
-    __limit = 1
+    __limit = 0
     __header = "HT"
     __body = "DT"
     __footer = "FT"
+
+    __file_name = ""
+    __map_file_name = ""
 
     def __init__(self):
         logging.debug(F'Init Import To Mongo.')
@@ -44,16 +47,27 @@ class ImportToMongo :
         # Set PID
         self.__pid = os.getpid()
         logging.debug(F'PID = {self.__pid}' )
-        
+
+        # Get args
+        self.get_args()
+
+        # Check args
+        if self.__file_name == '':
+            logging.debug(F'-file_name is required')
+            sys.exit()
+        if self.__map_file_name == '':
+            logging.debug(F'-map_file_name is required')
+            sys.exit()
+        if self.__limit == 0:
+            logging.debug(F'-limit is required')
+            sys.exit()
+
         # Setup Pymongo Connection String
         self.__myclient = pymongo.MongoClient(conn_str)
         self.__mydb = self.__myclient['gcc'] # Create Database
         self.__mycol = self.__mydb['gcc']    # Create Collection
         self.__mycol.delete_many({})         # Clear Collection
         logging.debug(F'DB Connected host={self.__myclient.HOST}:{self.__myclient.PORT}')
-
-        # Get args
-        self.get_args()
         logging.debug(F'args limit={self.__limit}')
         pass
     
@@ -66,17 +80,20 @@ class ImportToMongo :
 
     def get_args(self):
         for a in sys.argv:
-            print(a)
             if "-limit=" in a: 
                 self.__limit = int(a.split('=')[1])
             if "-header=" in a: 
-                self.__header = int(a.split('=')[1])
+                self.__header = str(a.split('=')[1])
             if "-body=" in a: 
-                self.__body = int(a.split('=')[1])
+                self.__body = str(a.split('=')[1])
             if "-footer=" in a: 
-                self.__footer = int(a.split('=')[1])
+                self.__footer = str(a.split('=')[1])
+            if "-file_name=" in a: 
+                self.__file_name = str(a.split('=')[1])
+            if "-map_file_name=" in a: 
+                self.__map_file_name = str(a.split('=')[1])
 
-    def get_mapping_template(self, map_file_name) :
+    def get_mapping_template(self) :
        isHeader= False,
        isBody = False,
        isFooter = False
@@ -85,7 +102,7 @@ class ImportToMongo :
            "body" : [],
            "footer" : []
        }
-       with open(map_file_name, mode="r") as f:
+       with open(self.__map_file_name, mode="r") as f:
            for line in f:
                line = line.strip()
 
@@ -107,7 +124,10 @@ class ImportToMongo :
                    continue
        return template
 
-    def start(self, file_name, map_file_name): 
+    def start(self): 
+        file_name = self.__file_name
+        map_file_name = self.__map_file_name
+
         row = 0                 # Current Row Insert Per Cycle
         limit = self.__limit    # Limit Row Insert Per Cycle (Recommend 10000 rows per cpu core)
         la_list_temp = []       # Temporary files
@@ -116,7 +136,7 @@ class ImportToMongo :
         footer = None           # var for keep footer file
 
         num_lines = sum(1 for line in open(file_name))  # Check Total Lines
-        map_template = self.get_mapping_template(map_file_name)    
+        map_template = self.get_mapping_template()    
 
         logging.debug(F'-------------------------------------------')
         logging.debug(F'Total Lines {str(num_lines)}')
@@ -178,5 +198,5 @@ class ImportToMongo :
 
 # Init App And Start Process
 app = ImportToMongo()
-app.start("./data/LA00000.GCC", "./data/LA00000.MAP")
+app.start()
 del(app)
