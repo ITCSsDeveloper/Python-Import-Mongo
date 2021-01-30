@@ -21,7 +21,7 @@ console.setFormatter(formatter)
 logging.getLogger('').addHandler(console)
 
 # Connection
-conn_str = 'mongodb://root:example@localhost:27017'
+conn_str = 'mongodb://mongodb:Password12345@localhost:27017'
 
 class ImportToMongo :
     __pid = None

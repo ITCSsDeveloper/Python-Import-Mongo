@@ -1,74 +1,74 @@
 # LA MODEL
 class header(object):
-    XXXORDTXXX = ''
-    XXXTEM_NXXX = ''
-    XXXFDXXX = ''
+    XXXORDTXXX :object
+    XXXTEM_NXXX :object
+    XXXFDXXX :object
     
 class body(object) :
-    XXCORDTXXX= ''
-    XXC = ''
-    XXENTIFICATION_TXXX= ''
-    XXD = ''
-    XXRTHOFDXXX= ''
-    XXTYPECXXX= ''
-    XXSUBTYPECXXX= ''
-    XXNXXX= ''
-    XXANTEDXXX= ''
-    XXINCIXXX= ''
-    XXTSTBALAXXX= ''
-    XXTTXXX= ''
-    XXXINSTXXX= ''
-    XXNINSTXXX= ''
-    XXEQINSTXXX= ''
-    XXSXXX= ''
-    XXUEIXXX= ''
-    XXEDXXX= ''
-    XXXTDUEDXXX= ''
-    XXGNDXXX= ''
-    XXENDXXX= ''
-    XXARTDXXX= ''
-    XXTUREDXXX= ''
-    XXAWDOWXXX= ''
-    XXAWDOWNDXXX= ''
-    XXSBDXXX= ''
-    XXSBXXX= ''
-    XXIDXXX= ''
-    XXTEFFDXXX= ''
-    XXNTEFFDXXX= ''
-    XXTRATECXXX= ''
-    XXTMXXX= ''
-    XXRMALRXXX= ''
-    XXNALTYRXXX= ''
-    XXRXXX= ''
-    XXACEPERXXX= ''
-    XXACEPERIODXXX= ''
-    XXRXXX= ''
-    XXRXXX= ''
-    XXRINTHXXX= ''
-    XXVANCEINTERXXX= ''
-    XXINFXXX= ''
-    XXINTXXX= ''
-    XXFXXX= ''
-    XXLARYFXXX= ''
-    XXPAYMETHODCODXXX= ''
-    XXLLADDRCXXX= ''
-    XXCXXX= ''
-    XXSTTRNDXXX= ''
-    XXDXXX= ''
-    XXMINXXX= ''
-    XXDXXX= ''
-    XXMPRXXX= ''
-    XXJECTCODXXX= ''
-    XXTOBJCXXX= ''
-    XXNSCXXX= ''
-    XXDIXXX= ''
-    XXDDUEDXXX= ''
-    XXSTDEBTRESXXX= ''
-    XXMRESTRUCTXXX= ''
-    XXLLOVERDXXX= ''
-    XXLLOVERINTRXXX= ''
-    XXLLOVERPENRXXX= ''
-    XXLLOVERSPREADRXXX= ''
-    XXURCEXXX= ''
-    XXAXXX= ''
-    XXackStaXXX= ''
+    XXCORDTXXX:object
+    XXC :object
+    XXENTIFICATION_TXXX:object
+    XXD :object
+    XXRTHOFDXXX:object
+    XXTYPECXXX:object
+    XXSUBTYPECXXX:object
+    XXNXXX:object
+    XXANTEDXXX:object
+    XXINCIXXX:object
+    XXTSTBALAXXX:object
+    XXTTXXX:object
+    XXXINSTXXX:object
+    XXNINSTXXX:object
+    XXEQINSTXXX:object
+    XXSXXX:object
+    XXUEIXXX:object
+    XXEDXXX:object
+    XXXTDUEDXXX:object
+    XXGNDXXX:object
+    XXENDXXX:object
+    XXARTDXXX:object
+    XXTUREDXXX:object
+    XXAWDOWXXX:object
+    XXAWDOWNDXXX:object
+    XXSBDXXX:object
+    XXSBXXX:object
+    XXIDXXX:object
+    XXTEFFDXXX:object
+    XXNTEFFDXXX:object
+    XXTRATECXXX:object
+    XXTMXXX:object
+    XXRMALRXXX:object
+    XXNALTYRXXX:object
+    XXRXXX:object
+    XXACEPERXXX:object
+    XXACEPERIODXXX:object
+    XXRXXX:object
+    XXRXXX:object
+    XXRINTHXXX:object
+    XXVANCEINTERXXX:object
+    XXINFXXX:object
+    XXINTXXX:object
+    XXFXXX:object
+    XXLARYFXXX:object
+    XXPAYMETHODCODXXX:object
+    XXLLADDRCXXX:object
+    XXCXXX:object
+    XXSTTRNDXXX:object
+    XXDXXX:object
+    XXMINXXX:object
+    XXDXXX:object
+    XXMPRXXX:object
+    XXJECTCODXXX:object
+    XXTOBJCXXX:object
+    XXNSCXXX:object
+    XXDIXXX:object
+    XXDDUEDXXX:object
+    XXSTDEBTRESXXX:object
+    XXMRESTRUCTXXX:object
+    XXLLOVERDXXX:object
+    XXLLOVERINTRXXX:object
+    XXLLOVERPENRXXX:object
+    XXLLOVERSPREADRXXX:object
+    XXURCEXXX:object
+    XXAXXX:object
+    XXackStaXXX:object
