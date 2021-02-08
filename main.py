@@ -15,6 +15,7 @@ mo_port = '27017'          # Port
 mo_database = 'gcc'      # Database Name   ( Mongo จะสร้างให้อัตโนมัติถ้ายังไม่ถูกสร้าง )
 mo_collection = 'gcc'    # Collection Name ( Mongo จะสร้างให้อัตโนมัติถ้ายังไม่ถูกสร้าง )
 
+log_name = 'gcc.log'     # Log File Name 
 #############################################################
 
 """
@@ -52,12 +53,12 @@ mo_collection = 'gcc'    # Collection Name ( Mongo จะสร้างให�
 """
  ไฟล์ Log จะเก็บอยู่ที่ Folder logs
 """
-
-
+# Get Script path runing
+script_path = os.path.dirname(os.path.abspath(__file__))
 
 # Setup Logging
 logFormatter = "%(asctime)s %(levelname)s: %(message)s"
-logging.basicConfig( filename='logs/logs.log',
+logging.basicConfig( filename=F'{script_path}/logs/{log_name}',
                     encoding='utf-8',
                     level=logging.DEBUG,
                     format=logFormatter,
