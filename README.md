@@ -25,12 +25,13 @@
 
 
 command (mac os) : 
-- python3 main.py -file_name=./data/LA00000.GCC -map_file_name=./data/LA00000.MAP -limit=100
-- python3 main.py -file_name=./data/LA00000.GCC -map_file_name=./data/LA00000.MAP -limit=100 -header=HT -body=DT -footer=FT
+- python3 main.py -file_name=./data/LA00000.GCC -map_file_name=./data/LA00000.MAP -limit=100 -mo_database=GCC -mo_collection=CBS_CA -log_name=GCC_CA.log
 
 command (windows)
-- python main.py -file_name=data/LA00000.GCC -map_file_name=data/LA00000.MAP -limit=100
-- python main.py -file_name=data/LA00000.GCC -map_file_name=data/LA00000.MAP -limit=100 -header=HT -body=DT -footer=FT
+- python main.py -file_name=data/LA00000.GCC -map_file_name=data/LA00000.MAP -limit=100 -mo_database=GCC -mo_collection=GCC_LA -log_name=GCC_LA.log
+
+Option Parameters
+-(Options) -header=HT -body=DT -footer=FT
 
 
 ขอบคุณครับ
